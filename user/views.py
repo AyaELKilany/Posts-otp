@@ -8,8 +8,11 @@ from rest_framework.permissions import IsAuthenticated , AllowAny
 
 
 
-@permission_classes([IsAuthenticated])
+
+
+# @permission_classes([IsAuthenticated])
 @api_view(['GET'])
+
 def all_Users(request):
     Queryset = User.objects.all()
     serializer = UserSerializer(Queryset , many=True)

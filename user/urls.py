@@ -1,6 +1,7 @@
 from .views import *
-from django.utils import path , include
+from django.urls import path
 
 urlpatterns = [
     path('' , all_Users , name='all_Users'),
 ]
+
