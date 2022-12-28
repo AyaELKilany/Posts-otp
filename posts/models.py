@@ -1,13 +1,12 @@
 from django.db import models
 from user.models import User
 
-class PostManager():
+class PostManager(models.Manager):
     def get_published(self):
-        published = []
-        if self.is_published:
-            print(self)
-            published.append(self)
-            return published
+        return super().get_queryset().filter(is_published=True)
+    
+    def get_unpublished(self):
+        return super.get_queryset().filter(is_published=False)
             
 
 class Post(models.Model):
