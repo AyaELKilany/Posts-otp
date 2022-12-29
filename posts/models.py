@@ -7,8 +7,13 @@ class PostManager(models.Manager):
     
     def get_unpublished(self):
         return super.get_queryset().filter(is_published=False)
+    
+    def create_post(self , user ,post , **other_fields):
+        post = self.model(user=user , post=post ,**other_fields)
+        post.save()
+        return post
+        
             
-
 class Post(models.Model):
     user = models.ForeignKey(User , on_delete=models.CASCADE ,related_name='posts')
     post = models.CharField(max_length=1000)

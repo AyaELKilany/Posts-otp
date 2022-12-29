@@ -18,9 +18,11 @@ def create_post(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def all_posts(request):
-    queryset = Post.objects.all()
-    serializer = PostSerializer(queryset , many=True)
-    return Response({'AllPosts': serializer.data} , status=status.HTTP_200_OK)
+    if request.user.is_staff:
+        queryset = Post.objects.all()
+        serializer = PostSerializer(queryset , many=True)
+        return Response({'AllPosts': serializer.data} , status=status.HTTP_200_OK)
+    raise PermissionError('Unauthorized')
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -32,6 +34,8 @@ def all_published_posts(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def all_unpublished_posts(request):
-    queryset = Post.objects.get_unpublished()
-    serializer = PostSerializer(queryset , many=True)
-    return Response({'AllPosts': serializer.data} , status=status.HTTP_200_OK)
+    if request.user.is_staff:
+        queryset = Post.objects.get_unpublished()
+        serializer = PostSerializer(queryset , many=True)
+        return Response({'AllPosts': serializer.data} , status=status.HTTP_200_OK)
+    raise PermissionError('Unauthorized')
