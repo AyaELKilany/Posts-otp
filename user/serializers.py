@@ -26,7 +26,6 @@ class UserCreateSerializer(serializers.ModelSerializer):
         return user
     
     def update(self, instance ,validated_data):
-        print('Updating')
         password = validated_data.pop('password', '')
         firstname = validated_data.pop('firstname', '')
         lastname = validated_data.pop('lastname', '')

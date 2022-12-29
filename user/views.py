@@ -50,7 +50,7 @@ def update_User(request):
 def delete_User(request , id):
     if request.user.is_staff:
         user = User.objects.get(id=id).delete()
-        return Response({'message' : 'User deleted successfully'} )
+        return Response({'message' : 'User deleted successfully'})
     return PermissionError('Unauthorized , Only Staff')
 
 

@@ -6,7 +6,7 @@ class PostManager(models.Manager):
         return super().get_queryset().filter(is_published=True)
     
     def get_unpublished(self):
-        return super.get_queryset().filter(is_published=False)
+        return super().get_queryset().filter(is_published=False)
     
     def create_post(self , user ,post , **other_fields):
         post = self.model(user=user , post=post ,**other_fields)

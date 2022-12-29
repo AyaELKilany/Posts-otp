@@ -39,3 +39,19 @@ def all_unpublished_posts(request):
         serializer = PostSerializer(queryset , many=True)
         return Response({'AllPosts': serializer.data} , status=status.HTTP_200_OK)
     raise PermissionError('Unauthorized')
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def update_post(request , id):
+    post = Post.objects.get(id=id)
+    updated_post = PostCreateSerializer(data=request.data , instance=post , partial=True)
+    if updated_post.is_valid():
+        updated_post.save()
+        return Response({'message': updated_post.data} , status=status.HTTP_200_OK)
+    return Response({'message': updated_post.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_post(request , id):
+    post = Post.objects.get(id=id).delete()
+    return Response({'message' : 'Post deleted successfully'})
