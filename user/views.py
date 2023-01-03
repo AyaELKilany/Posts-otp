@@ -63,5 +63,18 @@ def all_Staff(request):
         return Response({'Staff' : serializer.data} , status=status.HTTP_200_OK)
     raise PermissionError('Unauthorized , Only Staff')
 
-    
-    
+@api_view(['POST'])
+def create_token(request):
+    query_Set = VerificationOTP.objects.all().delete()
+    data = request.data
+    otp = OtpEmail(data=data)
+    if otp.is_valid():
+        otp.save()
+        print('views token created' , otp.data)
+        return Response({'message' : 'Email Sent'} , status=status.HTTP_200_OK)
+    return Response({'message' : otp.errors} , status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+def verify_token(request):
+    token = verify_token(data=request.data)

@@ -48,7 +48,7 @@ def default_key():
 
 def send_with_send_mail(subject , message , to_email):
     from_email = 'ta664054@gmail.com'
-    send_mail(subject=subject, message=message,to_email=to_email)
+    send_mail(from_email=from_email,subject=subject, message=message,recipient_list=to_email)
 
 class VerificationOTP(models.Model):
     unverified_email = models.EmailField(max_length = 80, unique=True) #R
@@ -82,8 +82,10 @@ class VerificationOTP(models.Model):
         message ="Your token for Verification is {token_value} It is valid for {time_validity} minutes."
         message = message.format(
             token_value=token, time_validity=self.step // 60)
-        
+        print('test token: ', self.unverified_email)
         send_with_send_mail(subject="VerificationOTP", message=message,to_email=[self.unverified_email])
+        print('Dooooone')
+        print('token: ', token)
         return token
 
     

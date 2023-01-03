@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User
+from .models import *
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -46,6 +46,20 @@ class UserCreateSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
     
-
-
     
+class OtpEmail(serializers.ModelSerializer):
+    class Meta:
+        model = VerificationOTP
+        fields = '__all__'
+        
+    def create(self, validated_data):
+        unverified_email = validated_data.get('unverified_email')
+        print(unverified_email)
+        otp_verification = VerificationOTP.objects.create(unverified_email=unverified_email)
+        print(otp_verification.id)
+        token = otp_verification.generate_challenge()
+        return otp_verification
+
+class Verify_token(serializers.ModelSerializer):
+    unverified_email = serializers.EmailField()
+    token = serializers.CharField()
