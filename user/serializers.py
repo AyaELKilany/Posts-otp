@@ -14,21 +14,26 @@ class UserCreateSerializer(serializers.ModelSerializer):
         extra_kwargs = {'password': {'write_only': True}}
     
     def create(self, validated_data):
+        groups = validated_data.pop('groups')
+        user_permissions = validated_data.pop('user_permissions')
         password = validated_data.pop('password', None)
         is_staff = validated_data.get('is_superuser')
         if is_staff:
             user = User.objects.create_staff(password=password , **validated_data)
 
         else:
+            print(validated_data)
             user = User.objects.create_user(password=password,**validated_data)
             
         user.save()
         return user
     
     def update(self, instance ,validated_data):
+        
         password = validated_data.pop('password', '')
         firstname = validated_data.pop('firstname', '')
         lastname = validated_data.pop('lastname', '')
+        
         
         for (key, value) in validated_data.items():
             setattr(instance, key, value)

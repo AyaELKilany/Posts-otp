@@ -3,16 +3,17 @@ from django.contrib.auth.models import AbstractBaseUser , PermissionsMixin
 from django.contrib.auth.base_user import BaseUserManager
 from django_otp.oath import TOTP
 from django_otp.util import random_hex , hex_validator
-import time
+import time , os
 from django.core.mail import send_mail
 
 class CustomUserManager(BaseUserManager):
-    def create_user(self,mobile,email,password , **other_fields):
+    def create_user(self,mobile,email,password, **other_fields):
+        
         if not mobile:
             raise ValueError(_('you must provide a mobile number'))
         if not email:
             raise ValueError(_('you must provide an email address'))
-        
+ 
         email = self.normalize_email(email)
         user = self.model(mobile=mobile, email=email , **other_fields)
         user.set_password(password)
@@ -28,7 +29,11 @@ class CustomUserManager(BaseUserManager):
             raise ValueError(_('staff must have is_staff=True.'))
         
         self.create_user(mobile,email,password,**other_fields)
-         
+
+def get_image_path(instance , filename):
+    print(instance.id)
+    print(os.path.join(f"user_{instance.id}" , f"profile_image_{filename}"))
+    return os.path.join(f"user_{instance.id}" , f"profile_image_{filename}")
 
 
 class User(AbstractBaseUser , PermissionsMixin):
@@ -36,6 +41,7 @@ class User(AbstractBaseUser , PermissionsMixin):
     lastname = models.CharField(max_length=30)
     mobile = models.CharField(max_length=100 , unique=True)
     email = models.EmailField(max_length=80 , unique=True)
+    profile_image = models.ImageField(upload_to=get_image_path)
     is_staff = models.BooleanField(default=False)  
     is_active = models.BooleanField(default=True)  
     objects = CustomUserManager()
