@@ -77,4 +77,11 @@ def create_token(request):
 
 @api_view(['POST'])
 def verify_token(request):
-    token = verify_token(data=request.data)
+    token = Verify_token(data=request.data)
+    if token.is_valid():
+        try:
+           obj_otp=VerificationOTP.objects.get(unverified_email=request.data["unverified_email"])
+        except VerificationOTP.DoesNotExist:
+            return Response({"message":"the VerificationOTP not found"},status=status.HTTP_400_BAD_REQUEST)
+        return Response({"verified":obj_otp.verify_token(token=request.data["token"])},status=status.HTTP_200_OK)
+    return Response(token.errors,status=status.HTTP_400_BAD_REQUEST)

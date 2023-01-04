@@ -63,3 +63,6 @@ class OtpEmail(serializers.ModelSerializer):
 class Verify_token(serializers.ModelSerializer):
     unverified_email = serializers.EmailField()
     token = serializers.CharField()
+    class Meta:
+        model = VerificationOTP
+        fields = '__all__'

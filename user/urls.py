@@ -9,5 +9,6 @@ urlpatterns = [
     path('delete/<int:id>' , delete_User , name='delete_user'),
     path('staff',all_Staff , name='all_staff'),
     path('token' , create_token , name='create_token'),
+    path('verify', verify_token , name='verify_token')
 ]
 
