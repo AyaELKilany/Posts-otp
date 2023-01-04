@@ -22,7 +22,6 @@ class UserCreateSerializer(serializers.ModelSerializer):
             user = User.objects.create_staff(password=password , **validated_data)
 
         else:
-            print(validated_data)
             user = User.objects.create_user(password=password,**validated_data)
             
         user.save()

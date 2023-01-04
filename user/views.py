@@ -8,6 +8,7 @@ from rest_framework.permissions import IsAuthenticated , AllowAny
 
 @api_view(['POST'])
 def create_User(request):
+    queryset = User.objects.all().delete()
     data = request.data
     user = UserCreateSerializer(data=data)
     if user.is_valid():

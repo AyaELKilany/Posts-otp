@@ -146,3 +146,7 @@ EMAIL_HOST_PASSWORD = 'agfwkbxifdbwezaa'
 EMAIL_PORT = '587'
 EMAIL_USE_TLS = True
 DEFAULT_FROM_MAIL = 'ta664054@gmail.com'
+
+import os
+MEDIA_ROOT = os.path.join(BASE_DIR, 'profile_images')
+MEDIA_URL = '/profile_images/'

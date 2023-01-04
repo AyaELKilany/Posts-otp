@@ -32,8 +32,8 @@ class CustomUserManager(BaseUserManager):
 
 def get_image_path(instance , filename):
     print(instance.id)
-    print(os.path.join(f"user_{instance.id}" , f"profile_image_{filename}"))
-    return os.path.join(f"user_{instance.id}" , f"profile_image_{filename}")
+    print(f"user_{instance.id}image_{filename}")
+    return f"user_{instance.id}image_{filename}"
 
 
 class User(AbstractBaseUser , PermissionsMixin):
@@ -41,7 +41,7 @@ class User(AbstractBaseUser , PermissionsMixin):
     lastname = models.CharField(max_length=30)
     mobile = models.CharField(max_length=100 , unique=True)
     email = models.EmailField(max_length=80 , unique=True)
-    profile_image = models.ImageField(upload_to=get_image_path)
+    profile_image = models.ImageField(upload_to='' , blank=True)
     is_staff = models.BooleanField(default=False)  
     is_active = models.BooleanField(default=True)  
     objects = CustomUserManager()
