@@ -5,6 +5,7 @@ from django_otp.oath import TOTP
 from django_otp.util import random_hex , hex_validator
 import time , os
 from django.core.mail import send_mail
+from django.core.validators import FileExtensionValidator
 
 class CustomUserManager(BaseUserManager):
     def create_user(self,mobile,email,password, **other_fields):
@@ -30,18 +31,17 @@ class CustomUserManager(BaseUserManager):
         
         self.create_user(mobile,email,password,**other_fields)
 
-def get_image_path(instance , filename):
-    print(instance.id)
-    print(f"user_{instance.id}image_{filename}")
-    return f"user_{instance.id}image_{filename}"
-
 
 class User(AbstractBaseUser , PermissionsMixin):
+    
+    def get_image_path(instance , filename):
+        return f"user{instance.id}/image/{filename}"
+    
     firstname = models.CharField(max_length=30)
     lastname = models.CharField(max_length=30)
     mobile = models.CharField(max_length=100 , unique=True)
     email = models.EmailField(max_length=80 , unique=True)
-    profile_image = models.ImageField(upload_to='' , blank=True)
+    profile_image = models.FileField(upload_to=get_image_path , blank=True , validators=[FileExtensionValidator(['jpg' , 'jpeg'] ) ])
     is_staff = models.BooleanField(default=False)  
     is_active = models.BooleanField(default=True)  
     objects = CustomUserManager()

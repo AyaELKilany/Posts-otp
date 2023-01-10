@@ -17,12 +17,12 @@ def create_User(request):
     return Response({'User' : user.errors} , status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def all_Users(request):
-    if request.user.is_staff:
-        Queryset = User.objects.all()
-        serializer = UserSerializer(Queryset , many=True)
-        return Response({'Users' : serializer.data} , status=status.HTTP_200_OK)
+    # if request.user.is_staff:
+    Queryset = User.objects.all()
+    serializer = UserSerializer(Queryset , many=True)
+    return Response({'Users' : serializer.data} , status=status.HTTP_200_OK)
     raise PermissionError('Unauthorized , Only Staff')
 
 @api_view(['GET'])
